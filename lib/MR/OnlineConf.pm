@@ -16,14 +16,14 @@ use Sys::Hostname ();
 
 my $DEFAULT_CONFIG = {
     database => {
-        host      => 'unknown', 
+        host      => 'unknown',
         user      => 'unknown',
         password  => 'unknown',
         base      => 'unknown',
-        timeout   => 2,                                                                                                           
+        timeout   => 2,
     },
     debug => 0,
-    logfile  => '/var/log/onlineconf_updater.log', 
+    logfile  => '/var/log/onlineconf_updater.log',
     pidfile  => '/var/run/onlineconf_updater.pid',
     data_dir => '/usr/local/etc/onlineconf/',
     update_interval => 60,
@@ -88,7 +88,7 @@ sub get {
         $module = 'TREE';
     }
 
-    $self->_say(-1,"incorrect call. module and  key must be defined\n") 
+    $self->_say(-1,"incorrect call. module and  key must be defined\n")
         and return $default unless $module && $key;
 
     $self->reload($module);
@@ -99,7 +99,7 @@ sub get {
         }
     }
 
-    $self->{cfg}{debug} < 2 || $self->_say(2,"cant find key $key in module $module: use default value\n") 
+    $self->{cfg}{debug} < 2 || $self->_say(2,"cant find key $key in module $module: use default value\n")
         and return $default unless exists $self->{cache}{$module} && exists $self->{cache}{$module}{$key};
 
     unless ($self->{config}{enable_cdb_client}) {
@@ -148,15 +148,15 @@ sub reload {
 
 sub _check {
     my ($self,$module) = @_;
-    $self->_say(2,"module $module never checked and need to load\n") 
+    $self->_say(2,"module $module never checked and need to load\n")
         and return 1 unless exists $self->{checks}{$module};
 
-    $self->{cfg}{debug} < 2 || $self->_say(2,"skip check for module $module due timelimit\n") 
+    $self->{cfg}{debug} < 2 || $self->_say(2,"skip check for module $module due timelimit\n")
         and return 0 if $self->{checks}{$module} + $self->{cfg}{check_interval} > time;
 
     $self->{checks}{$module} = time;
 
-    $self->_say(2,"module $module never loaded and need to load\n") 
+    $self->_say(2,"module $module never loaded and need to load\n")
         and return 1 unless exists $self->{load}{$module};
 
     my @stat = $self->_updater_statFile($module);
@@ -197,7 +197,7 @@ sub _reload {
 
     $self->{load}{$module} = time;
     $self->{checks}{$module} = time;
-    
+
     $self->_say(1,"reload config $module ok\n");
 
     return 1;
@@ -300,10 +300,10 @@ sub _updater_restore {
     unless ($s->[-1] eq '#EOF'){
         $self->_say(-1,'cant find EOF marker') and return undef;
     }
-    $self->_say(-1,"cant find Version or/and Name variable") and return undef 
+    $self->_say(-1,"cant find Version or/and Name variable") and return undef
         unless $data->{Version} && $data->{Name};
     $self->_say(3,"read config " , $data);
-    return $data;    
+    return $data;
 }
 
 1;
