@@ -81,6 +81,7 @@ sub _say {
 
 sub get {
     my ($self,$module,$key,$default) = @_;
+    $self = $self->instance unless ref $self;
 
     if ($module && $module =~ /^\//) {
         $default = $key;
@@ -111,6 +112,7 @@ sub get {
 
 sub getModule {
     my ($self, $module) = @_;
+    $self = $self->instance unless ref $self;
     $self->_say(-1,"incorrect call. module must be defined\n") and return unless $module;
     $self->reload($module);
 
@@ -133,6 +135,7 @@ sub getModule {
 
 sub reload {
     my ($self,$module,%opts) = @_;
+    $self = $self->instance unless ref $self;
 
     if ($self->{config}{enable_cdb_client}) {
         if (exists $self->{cache}{$module}) {
