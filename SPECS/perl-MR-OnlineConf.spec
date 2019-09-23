@@ -24,7 +24,7 @@ Obsoletes:      perl-MR-Onlineconf
 Onlineconf perl client. Built from revision %{__revision}.
 
 %prep
-%setup -n onlineconf/client
+%setup -n onlineconf-perl
 
 %build
 %__perl Makefile.PL INSTALLDIRS=vendor
