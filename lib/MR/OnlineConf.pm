@@ -162,7 +162,13 @@ sub _check {
     $self->_say(2,"module $module never loaded and need to load\n")
         and return 1 unless exists $self->{load}{$module};
 
-    my @stat = $self->_updater_statFile($module);
+    my @stat;
+    if ($self->{config}{enable_cdb_client}) {
+        @stat = stat $self->LOCAL_CFG_PATH().$module.'.cdb';
+    } else {
+        @stat = $self->_updater_statFile($module);
+    }
+
     unless (@stat){
         $self->_say(-1,"cant stat module $module\n");
         return undef;
